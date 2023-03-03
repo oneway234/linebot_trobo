@@ -48,20 +48,17 @@ def handle_message(event):
 
     if working_status:
         now_msg = chatgpt.get_now_msg()
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=now_msg))
+        if now_msg:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=now_msg))
+        else:
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text="GG"))
         chatgpt.add_msg("user", f"{event.message.text}")
-        now_msg = chatgpt.get_now_msg()
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=now_msg))
         reply_msg = chatgpt.get_response().replace("AI:", "", 1)
         chatgpt.add_msg("assistant", f"{reply_msg}")
-        now_msg = chatgpt.get_now_msg()
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=now_msg))
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_msg))
